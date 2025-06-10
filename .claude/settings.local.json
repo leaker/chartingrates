@@ -3,7 +3,13 @@
     "allow": [
       "Bash(npm install)",
       "Bash(npm start)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(pnpm create:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm build:*)",
+      "Bash(timeout:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }

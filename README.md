@@ -32,7 +32,21 @@ pnpm install
 
 ## Usage
 
-### Method 1: Using the Node.js Server (Recommended)
+### Method 1: Deploy to Vercel (Recommended for Production)
+
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
+```
+
+2. Deploy to Vercel:
+```bash
+vercel
+```
+
+3. Follow the prompts to deploy your application. The API will be automatically handled by Vercel's serverless functions.
+
+### Method 2: Using the Node.js Server (For Local Development)
 
 1. Start the server:
 ```bash
@@ -43,7 +57,7 @@ pnpm start
 
 The application will automatically fetch real-time data from the XE.com API using the configured authentication.
 
-### Method 2: Direct HTML File Access
+### Method 3: Direct HTML File Access
 
 You can open `index.html` directly in your browser, but this may encounter CORS issues when fetching data from the API.
 
@@ -64,13 +78,16 @@ Parameters:
 
 ```
 chartingrates/
-├── index.html          # Main HTML file
-├── app.js             # Frontend JavaScript logic
-├── server.js          # Express server for API proxy
-├── package.json       # Project dependencies
-├── docs/              # Documentation and sample data
+├── api/               # Vercel serverless functions
+│   └── exchange-rates.js  # API proxy function
+├── index.html         # Main HTML file
+├── app.js            # Frontend JavaScript logic
+├── server.js         # Express server for local development
+├── vercel.json       # Vercel configuration
+├── package.json      # Project dependencies
+├── docs/             # Documentation and sample data
 │   └── charting-rates.json  # Sample API response
-└── README.md          # This file
+└── README.md         # This file
 ```
 
 ## Technical Details
