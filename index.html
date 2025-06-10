@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USD/JPY Exchange Rate Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #chartContainer {
+            position: relative;
+            height: 500px;
+            margin: 20px 0;
+        }
+        .info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .monthly-avg {
+            margin-top: 30px;
+        }
+        .monthly-avg h2 {
+            color: #333;
+            font-size: 20px;
+        }
+        .monthly-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .monthly-table th, .monthly-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .monthly-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #666;
+        }
+        .error {
+            color: #d32f2f;
+            padding: 20px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .controls label {
+            font-weight: bold;
+        }
+        .controls select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .controls button {
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>USD/JPY Real-time Exchange Rate Chart</h1>
+        <div class="info">
+            <p>Data source: XE.com API real-time data</p>
+            <p>Hover over the chart to view exchange rates at specific times</p>
+            <p>Monthly average statistics are displayed when data period exceeds 30 days</p>
+        </div>
+        <div class="controls">
+            <label for="timeRange">Time Range:</label>
+            <select id="timeRange">
+                <option value="3m">3 Months</option>
+                <option value="6m">6 Months</option>
+                <option value="1y">1 Year</option>
+                <option value="2y" selected>2 Years</option>
+                <option value="5y">5 Years</option>
+                <option value="10y">10 Years</option>
+            </select>
+            <button id="updateChart">Update</button>
+        </div>
+        <div id="chartContainer">
+            <canvas id="rateChart"></canvas>
+        </div>
+        <div class="monthly-avg" id="monthlyAvg" style="display: none;">
+            <h2>Monthly Average Exchange Rate Statistics</h2>
+            <table class="monthly-table" id="monthlyTable">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Average Rate</th>
+                        <th>Highest Rate</th>
+                        <th>Lowest Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="monthlyTableBody">
+                </tbody>
+            </table>
+        </div>
+        <div class="loading" id="loading">Loading data...</div>
+        <div class="error" id="error" style="display: none;"></div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="debug.js"></script>
+</body>
+</html>

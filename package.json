@@ -1,0 +1,16 @@
+{
+  "name": "chartingrates",
+  "version": "1.0.0",
+  "description": "USD/JPY Exchange Rate Chart Display Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "pnpm install"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5"
+  }
+}
