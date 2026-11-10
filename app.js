@@ -48,20 +48,38 @@ function processData(data) {
     throw new Error("Daily interval data not found");
   }
 
-  const startTime = dailyBatch.startTime;
-  const interval = dailyBatch.interval;
+  const DAY = 86400000;
 
-  // The first value (if < 1) is an offset that needs to be subtracted from all values
-  const offset = dailyBatch.rates[0] < 1 ? dailyBatch.rates[0] : 0;
-  const rates = dailyBatch.rates.slice(1);
-
-  rawData = rates.map((rate, index) => {
-    const timestamp = startTime + index * interval;
-    return {
-      timestamp: new Date(timestamp),
+  // Decode a batch: rates[0] is a random per-request offset, the rest are offset values.
+  const decode = (batch) => {
+    const offset = batch.rates[0] < 1 ? batch.rates[0] : 0;
+    return batch.rates.slice(1).map((rate, index) => ({
+      time: batch.startTime + index * batch.interval,
       rate: rate - offset,
-    };
-  });
+    }));
+  };
+
+  const points = decode(dailyBatch);
+  let lastTime = points.length ? points[points.length - 1].time : dailyBatch.startTime - DAY;
+
+  // The daily batch lags ~30 days behind. A daily value is the 00:00 UTC sample,
+  // so extend it with the 00:00 UTC samples from the finer batches (coarsest first).
+  const finer = data.batchList
+    .filter((batch) => batch.interval < DAY)
+    .sort((a, b) => b.interval - a.interval);
+  for (const batch of finer) {
+    for (const point of decode(batch)) {
+      if (point.time > lastTime && point.time % DAY === 0) {
+        points.push(point);
+        lastTime = point.time;
+      }
+    }
+  }
+
+  rawData = points.map((point) => ({
+    timestamp: new Date(point.time),
+    rate: point.rate,
+  }));
 
   // Store all data for filtering
   allData = [...rawData];
