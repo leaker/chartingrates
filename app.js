@@ -94,7 +94,7 @@ function calculateMonthlyAverages(data) {
   const monthlyData = {};
 
   data.forEach((item) => {
-    const yearMonth = `${item.timestamp.getFullYear()}-${String(item.timestamp.getMonth() + 1).padStart(2, "0")}`;
+    const yearMonth = `${item.timestamp.getUTCFullYear()}-${String(item.timestamp.getUTCMonth() + 1).padStart(2, "0")}`;
 
     if (!monthlyData[yearMonth]) {
       monthlyData[yearMonth] = {
