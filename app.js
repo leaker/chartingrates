@@ -112,8 +112,13 @@ function calculateMonthlyAverages(data) {
     const max = Math.max(...rates);
     const min = Math.min(...rates);
 
+    const now = new Date();
+    const currentMonth = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
+
     return {
       month: month.month,
+      days: rates.length,
+      provisional: month.month >= currentMonth,
       average: average.toFixed(4),
       max: max.toFixed(4),
       min: min.toFixed(4),
@@ -226,8 +231,12 @@ function displayMonthlyAverages(monthlyAverages) {
 
   monthlyAverages.forEach((month) => {
     const row = document.createElement("tr");
+    if (month.provisional) row.className = "provisional";
+    const label = month.provisional
+      ? `${month.month} <span class="badge">In progress · ${month.days} days</span>`
+      : month.month;
     row.innerHTML = `
-            <td>${month.month}</td>
+            <td>${label}</td>
             <td>${month.average}</td>
             <td>${month.max}</td>
             <td>${month.min}</td>
